@@ -26,6 +26,7 @@ writer.WriteUInt64(1); // 01 00 00 00 00 00
 
 writer.WriteAscii("text"); // 04 00 74 65 78 74 (2 bytes length + 4 bytes text)
 ```
+see /test for more.
 
 ## PacketReader
 
@@ -51,9 +52,10 @@ var result = reader.ReadUInt64(); // 01 00 00 00 00 00 => ulong 1
 var result = writer.ReadAscii(); // 04 00 74 65 78 74 (2 bytes length + 4 bytes text) => "text"
 ```
 
+see /test for more.
+
 
 The reader also has the capability to collect the read actions (opt-in). With this the data read can be easily visualized and traced back, especially handy when there is a more complex reading logic required.
-see /test for more.
 
 The PacketReadActions contains the data used (byte[]) and a list of actions, Each action contains the amount of bytes read and a custom message
 
