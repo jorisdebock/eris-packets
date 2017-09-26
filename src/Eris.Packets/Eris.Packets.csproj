@@ -2,6 +2,14 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
+    <Authors>Eris</Authors>
+    <Company />
+    <Product />
+    <PackageProjectUrl>https://github.com/wazowsk1/eris-packets</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/wazowsk1/eris-packets</RepositoryUrl>
+    <PackageLicenseUrl>https://github.com/wazowsk1/eris-packets/blob/master/LICENSE</PackageLicenseUrl>
+    <Description>A PacketWriter and PacketReader to easily create and read data packets (byte[])</Description>
+    <PackageReleaseNotes>Eris PacketWriter PacketReader</PackageReleaseNotes>
   </PropertyGroup>
 
   <ItemGroup>
