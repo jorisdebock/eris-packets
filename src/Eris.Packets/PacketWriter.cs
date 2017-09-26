@@ -1,6 +1,6 @@
-﻿using System;
+﻿using Eris.Extensions.Security;
+using System;
 using System.IO;
-using System.Runtime.InteropServices;
 using System.Security;
 using System.Text;
 
@@ -50,21 +50,28 @@ namespace Eris.Packets
         public void WriteAscii(string value)
         {
             var bytes = Encoding.ASCII.GetBytes(value);
-            WriteUInt16((ushort)bytes.Length);
+            WriteUInt16((ushort)value.Length);
             WriteUInt8Array(bytes);
         }
 
         public void WriteSecureAscii(SecureString value)
         {
-            var bytes = GetBytes(value);
-            WriteUInt16((ushort)bytes.Length);
+            var bytes = value.GetBytes(Encoding.ASCII);
+            WriteUInt16((ushort)value.Length);
             WriteUInt8Array(bytes);
         }
 
         public void WriteUnicode(string value)
         {
             var bytes = Encoding.Unicode.GetBytes(value);
-            WriteUInt16((ushort)bytes.Length);
+            WriteUInt16((ushort)(value.Length));
+            WriteUInt8Array(bytes);
+        }
+
+        public void WriteSecureUnicode(SecureString value)
+        {
+            var bytes = value.GetBytes(Encoding.Unicode);
+            WriteUInt16((ushort)value.Length);
             WriteUInt8Array(bytes);
         }
 
@@ -72,28 +79,6 @@ namespace Eris.Packets
         {
             _binaryWriter.Dispose();
             GC.SuppressFinalize(this);
-        }
-
-        // todo move
-        private byte[] GetBytes(SecureString value)
-        {
-            var bytes = new byte[value.Length];
-            var valuePtr = IntPtr.Zero;
-            try
-            {
-                valuePtr = Marshal.SecureStringToGlobalAllocUnicode(value);
-                for (var i = 0; i < value.Length; i++)
-                {
-                    var unicodeChar = Marshal.ReadInt16(valuePtr, i * 2);
-                    bytes[i] = (byte)unicodeChar;
-                }
-            }
-            finally
-            {
-                Marshal.ZeroFreeGlobalAllocUnicode(valuePtr);
-            }
-
-            return bytes;
         }
     }
 }

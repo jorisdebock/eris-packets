@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Eris.Extensions.Security;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Security;
@@ -43,7 +44,16 @@ namespace Eris.Packets
         public void SkipBytes(long length, string message = null)
         {
             AddReadAction(length, $"Skip ({length}): {message}");
-            _binaryReader.BaseStream.Position += length;
+
+            try
+            {
+                ThrowIfCanNotRead(length);
+                _binaryReader.BaseStream.Position += length;
+            }
+            catch (EndOfStreamException e)
+            {
+                throw new PacketReadException($"{e.Message}: {message}", GetPacketReadActions());
+            }
         }
 
         public byte[] ReadRemainingBytes(string message = null)
@@ -51,14 +61,7 @@ namespace Eris.Packets
             var length = _binaryReader.BaseStream.Length - _binaryReader.BaseStream.Position;
             AddReadAction(length, $"Remaining ({length}): {message}");
 
-            try
-            {
-                return _binaryReader.ReadBytes((int)length);
-            }
-            catch (EndOfStreamException e)
-            {
-                throw new PacketReadException($"{e.Message}: {message}", GetPacketReadActions());
-            }
+            return ReadBytes((int)length);
         }
 
         public byte[] ReadUInt8Array(int length, string message = null)
@@ -67,7 +70,7 @@ namespace Eris.Packets
 
             try
             {
-                return _binaryReader.ReadBytes(length);
+                return ReadBytes(length);
             }
             catch (EndOfStreamException e)
             {
@@ -91,7 +94,7 @@ namespace Eris.Packets
                 throw new PacketReadException($"{e.Message}: {message}, make sure the enum inherited from byte!", GetPacketReadActions());
             }
 
-            AddReadAction(1, $"Enum ({enumValue}): {message}");
+            AddReadAction(1, $"Enum8 ({enumValue}): {message}");
 
             return enumValue;
         }
@@ -112,7 +115,7 @@ namespace Eris.Packets
                 throw new PacketReadException($"{e.Message}: {message}, make sure the enum inherited from ushort!", GetPacketReadActions());
             }
 
-            AddReadAction(1, $"Enum ({enumValue}): {message}");
+            AddReadAction(2, $"Enum16 ({enumValue}): {message}");
 
             return enumValue;
         }
@@ -133,7 +136,28 @@ namespace Eris.Packets
                 throw new PacketReadException($"{e.Message}: {message}, make sure the enum inherited from uint!", GetPacketReadActions());
             }
 
-            AddReadAction(1, $"Enum ({enumValue}): {message}");
+            AddReadAction(4, $"Enum32 ({enumValue}): {message}");
+
+            return enumValue;
+        }
+
+        public T ReadUInt64<T>(string message = null) where T : struct, IConvertible
+        {
+            T enumValue;
+            try
+            {
+                enumValue = (T)(object)_binaryReader.ReadUInt64();
+            }
+            catch (EndOfStreamException e)
+            {
+                throw new PacketReadException($"{e.Message}: {message}", GetPacketReadActions());
+            }
+            catch (InvalidCastException e)
+            {
+                throw new PacketReadException($"{e.Message}: {message}, make sure the enum inherited from ulong!", GetPacketReadActions());
+            }
+
+            AddReadAction(8, $"Enum64 ({enumValue}): {message}");
 
             return enumValue;
         }
@@ -286,11 +310,12 @@ namespace Eris.Packets
 
         public string ReadAscii(string message = null)
         {
-            AddReadAction(2, $"Ascii length: {message}");
-
             try
             {
                 var length = _binaryReader.ReadUInt16();
+
+                AddReadAction(2, $"Ascii length ({length}): {message}");
+
                 return length > 0 ? ReadAscii(length, message) : null;
             }
             catch (EndOfStreamException e)
@@ -305,7 +330,7 @@ namespace Eris.Packets
 
             try
             {
-                bytes = _binaryReader.ReadBytes(length);
+                bytes = ReadBytes(length);
             }
             catch (EndOfStreamException e)
             {
@@ -313,17 +338,18 @@ namespace Eris.Packets
             }
 
             var text = Encoding.ASCII.GetString(bytes);
-            AddReadAction(length, $"Ascii ({length}) - \"{text}\": {message}");
+            AddReadAction(length, $"Ascii (\"{text}\"): {message}");
             return text;
         }
 
         public SecureString ReadSecureAscii(string message = null)
         {
-            AddReadAction(2, $"Ascii length: {message}");
-
             try
             {
                 var length = _binaryReader.ReadUInt16();
+
+                AddReadAction(2, $"Ascii length ({length}): {message}");
+
                 return length > 0 ? ReadSecureAscii(length, message) : null;
             }
             catch (EndOfStreamException e)
@@ -338,30 +364,28 @@ namespace Eris.Packets
 
             try
             {
-                bytes = _binaryReader.ReadBytes(length);
+                bytes = ReadBytes(length);
             }
             catch (EndOfStreamException e)
             {
                 throw new PacketReadException($"{e.Message}: {message}", GetPacketReadActions());
             }
 
-            var secureString = new SecureString();
-            foreach (var c in Encoding.ASCII.GetChars(bytes))
-            {
-                secureString.AppendChar(c);
-            }
-            AddReadAction(length, $"Ascii ({length}) - \"********\": {message}");
+            var secureString = bytes.ToSecureString(Encoding.ASCII);
+
+            AddReadAction(length, $"Ascii (\"********\"): {message}");
             return secureString;
         }
 
         public string ReadUnicode(string message = null)
         {
-            AddReadAction(2, $"Unicode length: {message}");
-
             try
             {
                 var length = _binaryReader.ReadUInt16() * 2;
-                return length > 0 ? ReadUnicode(length) : null;
+
+                AddReadAction(2, $"Unicode length ({length}): {message}");
+
+                return length > 0 ? ReadUnicode(length, message) : null;
             }
             catch (EndOfStreamException e)
             {
@@ -375,7 +399,7 @@ namespace Eris.Packets
 
             try
             {
-                bytes = _binaryReader.ReadBytes(length);
+                bytes = ReadBytes(length);
             }
             catch (EndOfStreamException e)
             {
@@ -383,9 +407,44 @@ namespace Eris.Packets
             }
 
             var text = Encoding.Unicode.GetString(bytes);
-            AddReadAction(length, $"Unicode ({length}) - \"{text}\": {message}");
+            AddReadAction(length, $"Unicode (\"{text}\"): {message}");
 
             return text;
+        }
+
+        public SecureString ReadSecureUnicode(string message = null)
+        {
+            try
+            {
+                var length = _binaryReader.ReadUInt16() * 2;
+
+                AddReadAction(2, $"Unicode length ({length}): {message}");
+
+                return length > 0 ? ReadSecureUnicode(length, message) : null;
+            }
+            catch (EndOfStreamException e)
+            {
+                throw new PacketReadException($"{e.Message}: {message}", GetPacketReadActions());
+            }
+        }
+
+        public SecureString ReadSecureUnicode(int length, string message = null)
+        {
+            byte[] bytes;
+
+            try
+            {
+                bytes = ReadBytes(length);
+            }
+            catch (EndOfStreamException e)
+            {
+                throw new PacketReadException($"{e.Message}: {message}", GetPacketReadActions());
+            }
+
+            var secureString = bytes.ToSecureString(Encoding.Unicode);
+
+            AddReadAction(length, $"Unicode (\"********\"): {message}");
+            return secureString;
         }
 
         public void Dispose()
@@ -395,5 +454,20 @@ namespace Eris.Packets
         }
 
         private void AddReadAction(long readCount, string message) => _packetReadActions?.Add(new PacketReadAction(readCount, message));
+
+        private byte[] ReadBytes(int length)
+        {
+            ThrowIfCanNotRead(length);
+
+            return _binaryReader.ReadBytes(length);
+        }
+
+        private void ThrowIfCanNotRead(long length)
+        {
+            if (_binaryReader.BaseStream.Position + length > _binaryReader.BaseStream.Length)
+            {
+                throw new EndOfStreamException("End of stream reached");
+            }
+        }
     }
 }
