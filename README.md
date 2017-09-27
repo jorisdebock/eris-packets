@@ -1,5 +1,7 @@
 # Eris packets
 
+[![](https://img.shields.io/nuget/v/Eris.Packets.svg)](https://www.nuget.org/packages/Eris.Packets)
+
 A PacketWriter and PacketReader to easily create and read data packets (byte[])
 
 ## PacketWriter 
