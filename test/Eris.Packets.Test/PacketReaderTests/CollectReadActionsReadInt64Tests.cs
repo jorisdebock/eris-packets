@@ -15,19 +15,19 @@ namespace Eris.Packets.Test.PacketReaderTests
                 reader.ReadInt64();
 
                 var result = reader.GetPacketReadActions();
-                result.Actions.Should().HaveCount(1);
+                result.Should().HaveCount(1);
             }
         }
 
         [Fact]
-        public void Collect_ReadInt64_Should_Have_Action_ReadCount()
+        public void Collect_ReadInt64_Should_Have_Action_Count()
         {
             using (var reader = new PacketReader(_data, collectReadActions: true))
             {
                 reader.ReadInt64();
 
                 var result = reader.GetPacketReadActions();
-                result.Actions[0].ReadCount.Should().Be(8);
+                result[0].Count.Should().Be(8);
             }
         }
 
@@ -39,7 +39,7 @@ namespace Eris.Packets.Test.PacketReaderTests
                 reader.ReadInt64("this is a message");
 
                 var result = reader.GetPacketReadActions();
-                result.Actions[0].Message.Should().Be("Int64: this is a message");
+                result[0].Message.Should().Be("Int64: this is a message");
             }
         }
     }

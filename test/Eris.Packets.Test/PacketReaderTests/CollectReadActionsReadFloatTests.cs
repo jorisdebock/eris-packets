@@ -15,19 +15,19 @@ namespace Eris.Packets.Test.PacketReaderTests
                 reader.ReadFloat();
 
                 var result = reader.GetPacketReadActions();
-                result.Actions.Should().HaveCount(1);
+                result.Should().HaveCount(1);
             }
         }
 
         [Fact]
-        public void Collect_ReadFloat_Should_Have_Action_ReadCount()
+        public void Collect_ReadFloat_Should_Have_Action_Count()
         {
             using (var reader = new PacketReader(_data, collectReadActions: true))
             {
                 reader.ReadFloat();
 
                 var result = reader.GetPacketReadActions();
-                result.Actions[0].ReadCount.Should().Be(4);
+                result[0].Count.Should().Be(4);
             }
         }
 
@@ -39,7 +39,7 @@ namespace Eris.Packets.Test.PacketReaderTests
                 reader.ReadFloat("this is a message");
 
                 var result = reader.GetPacketReadActions();
-                result.Actions[0].Message.Should().Be("Float (1.53999E-36): this is a message");
+                result[0].Message.Should().Be("Float (1.53999E-36): this is a message");
             }
         }
     }

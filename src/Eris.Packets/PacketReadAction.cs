@@ -2,12 +2,12 @@
 {
     public class PacketReadAction
     {
-        public long ReadCount { get; }
+        public long Count { get; }
         public string Message { get; }
 
-        public PacketReadAction(long readCount, string message)
+        public PacketReadAction(long count, string message)
         {
-            ReadCount = readCount;
+            Count = count;
             Message = message;
         }
     }

@@ -10,6 +10,7 @@
     <PackageLicenseUrl>https://github.com/wazowsk1/eris-packets/blob/master/LICENSE</PackageLicenseUrl>
     <Description>A PacketWriter and PacketReader to easily create and read data packets (byte[])</Description>
     <PackageReleaseNotes>Eris PacketWriter PacketReader</PackageReleaseNotes>
+    <Version>1.0.1</Version>
   </PropertyGroup>
 
   <ItemGroup>

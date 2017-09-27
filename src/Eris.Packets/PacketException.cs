@@ -1,11 +1,16 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace Eris.Packets
 {
     public class PacketReadException : Exception
     {
-        public PacketReadActions PacketReadActions { get; }
+        public IReadOnlyList<PacketReadAction> PacketReadActions { get; }
 
-        public PacketReadException(string message, PacketReadActions packetReadActions = null) : base(message) => PacketReadActions = packetReadActions;
+        public PacketReadException(string message, IReadOnlyList<PacketReadAction> packetReadActions = null)
+            : base(message)
+        {
+            PacketReadActions = packetReadActions;
+        }
     }
 }

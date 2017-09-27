@@ -15,19 +15,19 @@ namespace Eris.Packets.Test.PacketReaderTests
                 reader.SkipBytes(2);
 
                 var result = reader.GetPacketReadActions();
-                result.Actions.Should().HaveCount(1);
+                result.Should().HaveCount(1);
             }
         }
 
         [Fact]
-        public void Collect_SkipBytes_Should_Have_Action_ReadCount()
+        public void Collect_SkipBytes_Should_Have_Action_Count()
         {
             using (var reader = new PacketReader(_data, collectReadActions: true))
             {
                 reader.SkipBytes(2);
 
                 var result = reader.GetPacketReadActions();
-                result.Actions[0].ReadCount.Should().Be(2);
+                result[0].Count.Should().Be(2);
             }
         }
 
@@ -39,7 +39,7 @@ namespace Eris.Packets.Test.PacketReaderTests
                 reader.SkipBytes(2, "this is a message");
 
                 var result = reader.GetPacketReadActions();
-                result.Actions[0].Message.Should().Be("Skip (2): this is a message");
+                result[0].Message.Should().Be("Skip (2): this is a message");
             }
         }
     }

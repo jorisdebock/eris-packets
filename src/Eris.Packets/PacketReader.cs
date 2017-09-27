@@ -10,7 +10,6 @@ namespace Eris.Packets
     public class PacketReader : IDisposable
     {
         private readonly BinaryReader _binaryReader;
-        private readonly byte[] _bytes;
         private readonly List<PacketReadAction> _packetReadActions;
 
         public PacketReader(byte[] bytes, bool collectReadActions = false)
@@ -24,20 +23,11 @@ namespace Eris.Packets
 
             if (collectReadActions)
             {
-                _bytes = bytes;
                 _packetReadActions = new List<PacketReadAction>();
             }
         }
 
-        public PacketReadActions GetPacketReadActions()
-        {
-            if (_bytes == null || _packetReadActions == null)
-            {
-                return null;
-            }
-
-            return new PacketReadActions(_bytes, _packetReadActions);
-        }
+        public IReadOnlyList<PacketReadAction> GetPacketReadActions() => _packetReadActions?.AsReadOnly();
 
         public bool HasMore() => _binaryReader.BaseStream.Length > _binaryReader.BaseStream.Position;
 
@@ -453,7 +443,7 @@ namespace Eris.Packets
             GC.SuppressFinalize(this);
         }
 
-        private void AddReadAction(long readCount, string message) => _packetReadActions?.Add(new PacketReadAction(readCount, message));
+        private void AddReadAction(long count, string message) => _packetReadActions?.Add(new PacketReadAction(count, message));
 
         private byte[] ReadBytes(int length)
         {

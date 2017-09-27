@@ -1,5 +1,4 @@
 ﻿using FluentAssertions;
-using System;
 using Xunit;
 
 namespace Eris.Packets.Test.PacketReaderTests
@@ -16,19 +15,19 @@ namespace Eris.Packets.Test.PacketReaderTests
                 reader.ReadSecureUnicode();
 
                 var result = reader.GetPacketReadActions();
-                result.Actions.Should().HaveCount(2);
+                result.Should().HaveCount(2);
             }
         }
 
         [Fact]
-        public void Collect_ReadSecureUnicode_Should_Have_Action_Length_ReadCount()
+        public void Collect_ReadSecureUnicode_Should_Have_Action_Length_Count()
         {
             using (var reader = new PacketReader(_data, collectReadActions: true))
             {
                 reader.ReadSecureUnicode();
 
                 var result = reader.GetPacketReadActions();
-                result.Actions[0].ReadCount.Should().Be(2);
+                result[0].Count.Should().Be(2);
             }
         }
 
@@ -40,19 +39,19 @@ namespace Eris.Packets.Test.PacketReaderTests
                 reader.ReadSecureUnicode("this is a message");
 
                 var result = reader.GetPacketReadActions();
-                result.Actions[0].Message.Should().Be("Unicode length (8): this is a message");
+                result[0].Message.Should().Be("Unicode length (8): this is a message");
             }
         }
 
         [Fact]
-        public void Collect_ReadSecureUnicode_Should_Have_Action_ReadCount()
+        public void Collect_ReadSecureUnicode_Should_Have_Action_Count()
         {
             using (var reader = new PacketReader(_data, collectReadActions: true))
             {
                 reader.ReadSecureUnicode();
 
                 var result = reader.GetPacketReadActions();
-                result.Actions[1].ReadCount.Should().Be(8);
+                result[1].Count.Should().Be(8);
             }
         }
 
@@ -64,7 +63,7 @@ namespace Eris.Packets.Test.PacketReaderTests
                 reader.ReadSecureUnicode("this is a message");
 
                 var result = reader.GetPacketReadActions();
-                result.Actions[1].Message.Should().Be("Unicode (\"********\"): this is a message");
+                result[1].Message.Should().Be("Unicode (\"********\"): this is a message");
             }
         }
     }

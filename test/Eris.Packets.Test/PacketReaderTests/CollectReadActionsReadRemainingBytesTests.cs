@@ -15,19 +15,19 @@ namespace Eris.Packets.Test.PacketReaderTests
                 reader.ReadRemainingBytes();
 
                 var result = reader.GetPacketReadActions();
-                result.Actions.Should().HaveCount(1);
+                result.Should().HaveCount(1);
             }
         }
 
         [Fact]
-        public void Collect_ReadRemainingBytes_Should_Have_Action_ReadCount()
+        public void Collect_ReadRemainingBytes_Should_Have_Action_Count()
         {
             using (var reader = new PacketReader(_data, collectReadActions: true))
             {
                 reader.ReadRemainingBytes();
 
                 var result = reader.GetPacketReadActions();
-                result.Actions[0].ReadCount.Should().Be(4);
+                result[0].Count.Should().Be(4);
             }
         }
 
@@ -39,7 +39,7 @@ namespace Eris.Packets.Test.PacketReaderTests
                 reader.ReadRemainingBytes("this is a message");
 
                 var result = reader.GetPacketReadActions();
-                result.Actions[0].Message.Should().Be("Remaining (4): this is a message");
+                result[0].Message.Should().Be("Remaining (4): this is a message");
             }
         }
     }
