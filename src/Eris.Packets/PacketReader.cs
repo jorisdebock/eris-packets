@@ -42,7 +42,7 @@ namespace Eris.Packets
             }
             catch (EndOfStreamException e)
             {
-                throw new PacketReadException($"{e.Message}: {message}", GetPacketReadActions());
+                throw new PacketReadException($"{e.Message}: {message}");
             }
         }
 
@@ -64,7 +64,7 @@ namespace Eris.Packets
             }
             catch (EndOfStreamException e)
             {
-                throw new PacketReadException($"{e.Message}: {message}", GetPacketReadActions());
+                throw new PacketReadException($"{e.Message}: {message}");
             }
         }
 
@@ -77,11 +77,11 @@ namespace Eris.Packets
             }
             catch (EndOfStreamException e)
             {
-                throw new PacketReadException($"{e.Message}: {message}", GetPacketReadActions());
+                throw new PacketReadException($"{e.Message}: {message}");
             }
             catch (InvalidCastException e)
             {
-                throw new PacketReadException($"{e.Message}: {message}, make sure the enum inherited from byte!", GetPacketReadActions());
+                throw new PacketReadException($"{e.Message}: {message}, make sure the enum inherited from byte!");
             }
 
             AddReadAction(1, $"Enum8 ({enumValue}): {message}");
@@ -98,11 +98,11 @@ namespace Eris.Packets
             }
             catch (EndOfStreamException e)
             {
-                throw new PacketReadException($"{e.Message}: {message}", GetPacketReadActions());
+                throw new PacketReadException($"{e.Message}: {message}");
             }
             catch (InvalidCastException e)
             {
-                throw new PacketReadException($"{e.Message}: {message}, make sure the enum inherited from ushort!", GetPacketReadActions());
+                throw new PacketReadException($"{e.Message}: {message}, make sure the enum inherited from ushort!");
             }
 
             AddReadAction(2, $"Enum16 ({enumValue}): {message}");
@@ -119,11 +119,11 @@ namespace Eris.Packets
             }
             catch (EndOfStreamException e)
             {
-                throw new PacketReadException($"{e.Message}: {message}", GetPacketReadActions());
+                throw new PacketReadException($"{e.Message}: {message}");
             }
             catch (InvalidCastException e)
             {
-                throw new PacketReadException($"{e.Message}: {message}, make sure the enum inherited from uint!", GetPacketReadActions());
+                throw new PacketReadException($"{e.Message}: {message}, make sure the enum inherited from uint!");
             }
 
             AddReadAction(4, $"Enum32 ({enumValue}): {message}");
@@ -140,11 +140,11 @@ namespace Eris.Packets
             }
             catch (EndOfStreamException e)
             {
-                throw new PacketReadException($"{e.Message}: {message}", GetPacketReadActions());
+                throw new PacketReadException($"{e.Message}: {message}");
             }
             catch (InvalidCastException e)
             {
-                throw new PacketReadException($"{e.Message}: {message}, make sure the enum inherited from ulong!", GetPacketReadActions());
+                throw new PacketReadException($"{e.Message}: {message}, make sure the enum inherited from ulong!");
             }
 
             AddReadAction(8, $"Enum64 ({enumValue}): {message}");
@@ -162,7 +162,7 @@ namespace Eris.Packets
             }
             catch (EndOfStreamException e)
             {
-                throw new PacketReadException($"{e.Message}: {message}", GetPacketReadActions());
+                throw new PacketReadException($"{e.Message}: {message}");
             }
         }
 
@@ -176,7 +176,7 @@ namespace Eris.Packets
             }
             catch (EndOfStreamException e)
             {
-                throw new PacketReadException($"{e.Message}: {message}", GetPacketReadActions());
+                throw new PacketReadException($"{e.Message}: {message}");
             }
         }
 
@@ -190,7 +190,7 @@ namespace Eris.Packets
             }
             catch (EndOfStreamException e)
             {
-                throw new PacketReadException($"{e.Message}: {message}", GetPacketReadActions());
+                throw new PacketReadException($"{e.Message}: {message}");
             }
         }
 
@@ -204,7 +204,7 @@ namespace Eris.Packets
             }
             catch (EndOfStreamException e)
             {
-                throw new PacketReadException($"{e.Message}: {message}", GetPacketReadActions());
+                throw new PacketReadException($"{e.Message}: {message}");
             }
         }
 
@@ -218,7 +218,7 @@ namespace Eris.Packets
             }
             catch (EndOfStreamException e)
             {
-                throw new PacketReadException($"{e.Message}: {message}", GetPacketReadActions());
+                throw new PacketReadException($"{e.Message}: {message}");
             }
         }
 
@@ -232,7 +232,7 @@ namespace Eris.Packets
             }
             catch (EndOfStreamException e)
             {
-                throw new PacketReadException($"{e.Message}: {message}", GetPacketReadActions());
+                throw new PacketReadException($"{e.Message}: {message}");
             }
         }
 
@@ -246,7 +246,7 @@ namespace Eris.Packets
             }
             catch (EndOfStreamException e)
             {
-                throw new PacketReadException($"{e.Message}: {message}", GetPacketReadActions());
+                throw new PacketReadException($"{e.Message}: {message}");
             }
         }
 
@@ -260,7 +260,7 @@ namespace Eris.Packets
             }
             catch (EndOfStreamException e)
             {
-                throw new PacketReadException($"{e.Message}: {message}", GetPacketReadActions());
+                throw new PacketReadException($"{e.Message}: {message}");
             }
         }
 
@@ -273,7 +273,7 @@ namespace Eris.Packets
             }
             catch (EndOfStreamException e)
             {
-                throw new PacketReadException($"{e.Message}: {message}", GetPacketReadActions());
+                throw new PacketReadException($"{e.Message}: {message}");
             }
 
             AddReadAction(1, $"Bool ({result}): {message}");
@@ -290,7 +290,7 @@ namespace Eris.Packets
             }
             catch (EndOfStreamException e)
             {
-                throw new PacketReadException($"{e.Message}: {message}", GetPacketReadActions());
+                throw new PacketReadException($"{e.Message}: {message}");
             }
 
             AddReadAction(4, $"Float ({result}): {message}");
@@ -310,7 +310,7 @@ namespace Eris.Packets
             }
             catch (EndOfStreamException e)
             {
-                throw new PacketReadException($"{e.Message}: {message}", GetPacketReadActions());
+                throw new PacketReadException($"{e.Message}: {message}");
             }
         }
 
@@ -324,7 +324,7 @@ namespace Eris.Packets
             }
             catch (EndOfStreamException e)
             {
-                throw new PacketReadException($"{e.Message}: {message}", GetPacketReadActions());
+                throw new PacketReadException($"{e.Message}: {message}");
             }
 
             var text = Encoding.ASCII.GetString(bytes);
@@ -344,7 +344,7 @@ namespace Eris.Packets
             }
             catch (EndOfStreamException e)
             {
-                throw new PacketReadException($"{e.Message}: {message}", GetPacketReadActions());
+                throw new PacketReadException($"{e.Message}: {message}");
             }
         }
 
@@ -358,7 +358,7 @@ namespace Eris.Packets
             }
             catch (EndOfStreamException e)
             {
-                throw new PacketReadException($"{e.Message}: {message}", GetPacketReadActions());
+                throw new PacketReadException($"{e.Message}: {message}");
             }
 
             var secureString = bytes.ToSecureString(Encoding.ASCII);
@@ -379,7 +379,7 @@ namespace Eris.Packets
             }
             catch (EndOfStreamException e)
             {
-                throw new PacketReadException($"{e.Message}: {message}", GetPacketReadActions());
+                throw new PacketReadException($"{e.Message}: {message}");
             }
         }
 
@@ -393,7 +393,7 @@ namespace Eris.Packets
             }
             catch (EndOfStreamException e)
             {
-                throw new PacketReadException($"{e.Message}: {message}", GetPacketReadActions());
+                throw new PacketReadException($"{e.Message}: {message}");
             }
 
             var text = Encoding.Unicode.GetString(bytes);
@@ -414,7 +414,7 @@ namespace Eris.Packets
             }
             catch (EndOfStreamException e)
             {
-                throw new PacketReadException($"{e.Message}: {message}", GetPacketReadActions());
+                throw new PacketReadException($"{e.Message}: {message}");
             }
         }
 
@@ -428,7 +428,7 @@ namespace Eris.Packets
             }
             catch (EndOfStreamException e)
             {
-                throw new PacketReadException($"{e.Message}: {message}", GetPacketReadActions());
+                throw new PacketReadException($"{e.Message}: {message}");
             }
 
             var secureString = bytes.ToSecureString(Encoding.Unicode);

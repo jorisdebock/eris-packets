@@ -71,19 +71,32 @@ using (var reader = new PacketReader(new byte[] { 0x01, 0x04 0x00 0x74 0x65 0x78
     
     var packetReadActions = reader.GetPacketReadActions();
 
-    var data = packetReadActions.Data;
-    // The data will contain the original input data
-    // 0x01, 0x04 0x00 0x74 0x65 0x78 0x74
-
-    var actions = packetReadActions.Actions;
-
     // the actions will contain a list of the following data
-    // bytes, message
+    // count, message
     // 1, "UInt8: this is a message"
     // 2, "Ascii length (4): Reading a ascii string"
-    // 4, "Ascii (\"text\"): Reading a ascii string"
-    
+    // 4, "Ascii ("text"): Reading a ascii string"    
 }
 ```
 
-When a read action is executed that can not be executed, like trying to read more data then the input that is given. A PacketException will be thrown which will include the error message and the PacketReadActions if the collectReadActions is turned on.
+
+When a read action is executed that can not be executed, like trying to read more data then the input that is given. A PacketReadException will be thrown with the message what caused it.
+
+```c#
+using (var reader = new PacketReader(new byte[] { 0x01, 0x04 0x00 }, collectReadActions: true))
+{
+    try
+    {
+        var result = reader.ReadUInt8("This is a message");
+
+        // will cause a PacketReadException because it will try to read past the end of the data
+        var result = reader.ReadAscii("Reading a ascii string");
+    }
+    catch(PacketReadException e)
+    {
+        // collect information
+        var message = e.Message;    
+        var packetReadActions = reader.GetPacketReadActions();
+    }   
+}
+```
